@@ -1,0 +1,53 @@
+<!-- templates/home.html-->
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+<title>Homepage</title>
+<div class="body">
+  <h2>Hi blueberry, Welcome to your schedule!</h2>
+  <b> I can't think of anything to put on this home page, so enjoy some dogs!a</b>
+  <!-- It took wanting to add dogs into my website to learn staticfiles lol -->
+</div>
+<div class="dogs">
+  <div class="picture-container">
+      <div class="picture">
+          <img src="{% static 'images/marshall1.png' %}">
+      </div>
+
+      <div class="picture">
+        <img src="{% static 'images/Corgi.jpg' %}">
+      </div>
+
+      <div class="picture">
+        <img src="{% static 'images/golden.jpeg' %}">
+      </div>
+
+      <div class="picture">
+        <img src="{% static 'images/close.png' %}">
+      </div>
+
+      <div class="picture">
+        <img src="{% static 'images/scratch.jpg' %}">
+      </div>
+
+      <div class="picture">
+        <img src="{% static 'images/marshall2.png' %}">
+      </div>
+  </div>
+</div>
+<div class="youtube-video-container">
+  <iframe width="600" height="337.5" src="https://www.youtube.com/embed/cQA4ezThqN4?si=S2xXibM9xLUqJ_h5" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+</div>
+<div class="youtube-video-container">
+  <iframe width="600" height="337.5" src="https://www.youtube.com/embed/ag_2xI287BM?si=e1u8V5fXfyz0xkBQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+</div>
+{% else %}
+<div class="body">
+  <p>You are not logged in</p>
+</div>
+{% endif %}
+{% endblock %}

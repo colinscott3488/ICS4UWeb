@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+        }
+    
+        .header {
+            background-color: #333;
+            color: #fff;
+            padding: 15px 0;
+            text-align: center;
+        }
+    
+        .navbar {
+            background-color: #555;
+            overflow: hidden;
+        }
+    
+        .navbar a {
+            float: left;
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+    
+        .navbar a:hover {
+            background-color: #007bff; /* Button Hover Color */
+            color: white;
+        }
+    
+        .content {
+            padding: 20px;
+            background-color: #fff;
+        }
+    </style>
+        
+</head>
+
+<body>
+
+    <div class="header">
+        <h1>website</h1>
+    </div>
+
+    <div class="navbar">
+        <a href="{% url 'home' %}">Home</a>
+        {% if user.is_authenticated %}
+        <a href="{% url 'usermgmt' %}">User Management</a>
+        <a href="{% url 'logout' %}">Log Out</a>
+        {% else %}
+        <a href="{% url 'login' %}">Log In</a>
+        {% endif %}
+    </div>
+
+    <div class="content">
+        {% block content %}
+        <h2>Welcome to our Modern Website!</h2>
+        <p>Hi, how are you today? This is a modern and responsive website design.</p>
+        {% endblock %}
+    </div>
+
+</body>
+
+</html>

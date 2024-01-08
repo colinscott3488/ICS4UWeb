@@ -1,0 +1,17 @@
+<!-- templates/schedulecreation.html-->
+{% extends "base.html" %}
+
+{% block content %}
+
+{% if user.is_staff %}
+{% else %}
+<div class="body">
+    <meta http-equiv="refresh" content="3; URL={% url 'home' %}" />
+</div>
+{% endif %}
+<form method="post" action="{% url 'userfind' %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Submit</button>
+</form>
+{% endblock %}

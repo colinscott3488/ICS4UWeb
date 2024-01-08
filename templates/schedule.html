@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Schedule{% endblock %}
+
+{% block content %}
+  {% if user.is_authenticated %}
+    <title>Settings</title>
+  {% else %}
+    <div class="body">
+      <meta http-equiv="refresh" content="3; URL={% url 'logout' %}" />
+    </div>
+  {% endif %}
+  <div class="content">
+    <div class="cal">
+        <form method="post" action="{% url 'week_change' %}">
+          {% csrf_token %}
+          {{ form.as_p }}
+          <button class="schedulebutton" type="submit" name="direction" value="back">Go Back</button>
+          <button class="schedulebutton" type="submit" name="direction" value="forward">Go Forward</button>
+          <button class="schedulebutton" type="submit" name="direction" value="current">Current Date</button>
+      </form>
+    </div>
+    {{ html_table|safe }}
+  </div>
+{% endblock %}

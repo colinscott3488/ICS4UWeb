@@ -1,0 +1,18 @@
+<!-- templates/scheduleuser.html-->
+{% extends "base.html" %}
+
+{% block content %}
+
+{% if user.is_staff %}
+{% else %}
+<div class="body">
+    <meta http-equiv="refresh" content="3; URL={% url 'home' %}" />
+</div>
+{% endif %}
+{{ cal|safe }}
+<form method="post" action="{% url 'scheduleEdit' %}">
+    {% csrf_token %}
+    <input type="time" name="start" required />
+    <button type="submit">Submit</button>
+</form>
+{% endblock %}
