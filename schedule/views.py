@@ -98,19 +98,20 @@ def userWeek(request):
     <tr><td class="mon">{weekView[0].strftime("%A %b %-d")}</td><td class="tue">{weekView[1].strftime("%A %b %-d")}</td><td class="wed">{weekView[2].strftime("%A %b %-d")}</td><td class="thu">{weekView[3].strftime("%A %b %-d")}</td><td class="fri">{weekView[4].strftime("%A %b %-d")}</td><td class="sat">{weekView[5].strftime("%A %b %-d")}</td><td class="sun">{weekView[6].strftime("%A %b %-d")}</td></tr>
     <tr><td class="mon">{dbEvent[0]}</td><td class="tue">{dbEvent[1]}</td><td class="wed">{dbEvent[2]}</td><td class="thu">{dbEvent[3]}</td><td class="fri">{dbEvent[4]}</td><td class="sat">{dbEvent[5]}</td><td class="sun">{dbEvent[6]}</td></tr>
     <tr><td class="mon">{jobCode[0]}</td><td class="tue">{jobCode[1]}</td><td class="wed">{jobCode[2]}</td><td class="thu">{jobCode[3]}</td><td class="fri">{jobCode[4]}</td><td class="sat">{jobCode[5]}</td><td class="sun">{jobCode[6]}</td></tr>
-    <tr class="button-container">
-        <td class="monButton"><button type="button">Button 1</button></td>
-        <td class="tueButton"><button type="button">Button 2</button></td>
-        <td class="wedButton"><button type="button">Button 3</button></td>
-        <td class="thuButton"><button type="button">Button 4</button></td>
-        <td class="friButton"><button type="button">Button 5</button></td>
-        <td class="satButton"><button type="button">Button 6</button></td>
-        <td class="sunButton"><button type="button">Button 7</button></td>
-    </tr>
     </table>
     '''
     repeated = True
     return render(request, 'scheduleuser.html', {'cal': week})
+
+    # <tr class="button-container">
+    #     <td class="monButton"><button type="button">Button 1</button></td>
+    #     <td class="tueButton"><button type="button">Button 2</button></td>
+    #     <td class="wedButton"><button type="button">Button 3</button></td>
+    #     <td class="thuButton"><button type="button">Button 4</button></td>
+    #     <td class="friButton"><button type="button">Button 5</button></td>
+    #     <td class="satButton"><button type="button">Button 6</button></td>
+    #     <td class="sunButton"><button type="button">Button 7</button></td>
+    # </tr>
 
 def weekChange(request):
     global delta
@@ -137,8 +138,9 @@ def weekChange(request):
 def scheduleEdit(request):
     if request.method == 'POST':
         #because im too lazy to use forms do all error handiling here
-        apple = request.POST.get('start')
-        print(apple)
+        startTime = request.POST.get('start')
+        endTime = request.POST.get('end')
+        print(startTime + endTime)
         return HttpResponseRedirect("/design/userfound")
     
     
@@ -188,6 +190,7 @@ def tableRequest(request):
             eventList[x] = foundTime[0].strftime("%-I:%M %p") + " - " + foundTime[1].strftime("%-I:%M %p")
         else:
             eventList[x] = "no event"
+    hours = (float(int(hours*100)))/100
     table = f'''
     <style>
         .{currentDate.strftime("%a").lower()} {orange}

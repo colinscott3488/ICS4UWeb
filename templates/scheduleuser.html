@@ -10,9 +10,104 @@
 </div>
 {% endif %}
 {{ cal|safe }}
-<form method="post" action="{% url 'scheduleEdit' %}">
+<!-- <form method="post" class="button-container" action="{% url 'scheduleEdit' %}">
     {% csrf_token %}
-    <input type="time" name="start" required />
+    Start time:
+    <input type="time" name="start"/><br>
+    End time:
+    <input type="time" name="start"/><br>
+    Job title:
+    <input type="text" id="Name" name="Name" maxlength="10"><br>
     <button type="submit">Submit</button>
-</form>
+</form> -->
+<table cellpadding="0" cellspacing="10" class="month">
+  <tr>
+    <td>
+      <form method="post" class="button-container" action="{% url 'scheduleEdit' %}">
+        {% csrf_token %}
+        Start time:
+        <input type="time" name="start" /><br>
+        End time:
+        <input type="time" name="end" /><br>
+        Job title:
+        <input type="text" id="Name" name="Name" maxlength="10"><br>
+        <button type="submit">Submit</button>
+      </form>
+    </td>
+    <td>
+      <form method="post" class="button-container" action="{% url 'scheduleEdit' %}">
+        {% csrf_token %}
+        Start time:
+        <input type="time" name="start" /><br>
+        End time:
+        <input type="time" name="end" /><br>
+        Job title:
+        <input type="text" id="Name" name="Name" maxlength="10"><br>
+        <button type="submit">Submit</button>
+      </form>
+    </td>
+    <td>
+        <form method="post" class="button-container" action="{% url 'scheduleEdit' %}">
+          {% csrf_token %}
+          Start time:
+          <input type="time" name="start" /><br>
+          End time:
+          <input type="time" name="end" /><br>
+          Job title:
+          <input type="text" id="Name" name="Name" maxlength="10"><br>
+          <button type="submit">Submit</button>
+        </form>
+      </td>
+      <td>
+        <form method="post" class="button-container" action="{% url 'scheduleEdit' %}">
+          {% csrf_token %}
+          Start time:
+          <input type="time" name="start" /><br>
+          End time:
+          <input type="time" name="end" /><br>
+          Job title:
+          <input type="text" id="Name" name="Name" maxlength="10"><br>
+          <button type="submit">Submit</button>
+        </form>
+      </td>
+      <td>
+        <form method="post" class="button-container" action="{% url 'scheduleEdit' %}">
+          {% csrf_token %}
+          Start time:
+          <input type="time" name="start" /><br>
+          End time:
+          <input type="time" name="end" /><br>
+          Job title:
+          <input type="text" id="Name" name="Name" maxlength="10"><br>
+          <button type="submit">Submit</button>
+        </form>
+      </td>
+      <td>
+        <form method="post" class="button-container" action="{% url 'scheduleEdit' %}">
+          {% csrf_token %}
+          Start time:
+          <input type="time" name="start" /><br>
+          End time:
+          <input type="time" name="end" /><br>
+          Job title:
+          <input type="text" id="Name" name="Name" maxlength="10"><br>
+          <button type="submit">Submit</button>
+        </form>
+      </td>
+      <td>
+        <form method="post" class="button-container" action="{% url 'scheduleEdit' %}">
+          {% csrf_token %}
+          Start time:
+          <input type="time" name="start" /><br>
+          End time:
+          <input type="time" name="end" /><br>
+          Job title:
+          <input type="text" id="Name" name="Name" maxlength="10"><br>
+          <button type="submit">Submit</button>
+        </form>
+      </td>
+  </tr>
+</table>
+<br>
+*if all fields are left blank, will count as call off
 {% endblock %}
