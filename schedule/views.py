@@ -3,7 +3,6 @@ import datetime
 from .forms import NavigationForm, scheduleCreate
 from django.http import HttpResponseRedirect
 from .models import Schedule
-# from .findschedule import timeFinder, jobCodeFinder
 import time
 
 #global values for schedule creation
