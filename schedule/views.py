@@ -138,9 +138,24 @@ def weekChange(request):
 def scheduleEdit(request):
     if request.method == 'POST':
         #because im too lazy to use forms do all error handiling here
-        startTime = request.POST.get('start')
-        endTime = request.POST.get('end')
-        print(startTime + endTime)
+        startShift = request.POST.get('start')
+        endShift = request.POST.get('end')
+        selectedJob = request.POST.get('job')
+        daySelected = request.POST.get('dayval')
+        # print("Start: ", startTime, "End: ", endTime, "Selected Job: ", selectedJob) debug line
+        if startShift == '' and endShift == '' and selectedJob == '':
+            selectedShift = Schedule.objects.filter(user=userList, dateStarting=weekDate + datetime.timedelta(days=int(daySelected)))
+            for x in selectedShift:
+                x.jobCode = "called off" 
+                x.save()
+        else:
+            newshift = Schedule()
+            newshift.user = userList
+            newshift.startTime = datetime.datetime.strptime(startShift, "%H:%M")
+            newshift.endTime = datetime.datetime.strptime(endShift, "%H:%M")
+            newshift.dateStarting = weekDate + datetime.timedelta(days=int(daySelected))
+            newshift.jobCode = selectedJob
+            newshift.save()
         return HttpResponseRedirect("/design/userfound")
     
     

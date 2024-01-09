@@ -10,99 +10,96 @@
 </div>
 {% endif %}
 {{ cal|safe }}
-<!-- <form method="post" class="button-container" action="{% url 'scheduleEdit' %}">
-    {% csrf_token %}
-    Start time:
-    <input type="time" name="start"/><br>
-    End time:
-    <input type="time" name="start"/><br>
-    Job title:
-    <input type="text" id="Name" name="Name" maxlength="10"><br>
-    <button type="submit">Submit</button>
-</form> -->
 <table cellpadding="0" cellspacing="10" class="month">
   <tr>
     <td>
       <form method="post" class="button-container" action="{% url 'scheduleEdit' %}">
         {% csrf_token %}
+        <input type="hidden" name="dayval" value="0"/>
         Start time:
         <input type="time" name="start" /><br>
         End time:
         <input type="time" name="end" /><br>
         Job title:
-        <input type="text" id="Name" name="Name" maxlength="10"><br>
+        <input type="text" name="job" maxlength="10"><br>
         <button type="submit">Submit</button>
       </form>
     </td>
     <td>
       <form method="post" class="button-container" action="{% url 'scheduleEdit' %}">
         {% csrf_token %}
+        <input type="hidden" name="dayval" value="1"/>
         Start time:
         <input type="time" name="start" /><br>
         End time:
         <input type="time" name="end" /><br>
         Job title:
-        <input type="text" id="Name" name="Name" maxlength="10"><br>
+        <input type="text" name="job" maxlength="10"><br>
         <button type="submit">Submit</button>
       </form>
     </td>
     <td>
         <form method="post" class="button-container" action="{% url 'scheduleEdit' %}">
           {% csrf_token %}
+          <input type="hidden" name="dayval" value="2"/>
           Start time:
           <input type="time" name="start" /><br>
           End time:
           <input type="time" name="end" /><br>
           Job title:
-          <input type="text" id="Name" name="Name" maxlength="10"><br>
+          <input type="text" name="job" maxlength="10"><br>
           <button type="submit">Submit</button>
         </form>
       </td>
       <td>
         <form method="post" class="button-container" action="{% url 'scheduleEdit' %}">
           {% csrf_token %}
+          <input type="hidden" name="dayval" value="3"/>
           Start time:
           <input type="time" name="start" /><br>
           End time:
           <input type="time" name="end" /><br>
           Job title:
-          <input type="text" id="Name" name="Name" maxlength="10"><br>
+          <input type="text" name="job" maxlength="10"><br>
           <button type="submit">Submit</button>
         </form>
       </td>
       <td>
         <form method="post" class="button-container" action="{% url 'scheduleEdit' %}">
           {% csrf_token %}
+          <input type="hidden" name="dayval" value="4"/>
           Start time:
           <input type="time" name="start" /><br>
           End time:
           <input type="time" name="end" /><br>
           Job title:
-          <input type="text" id="Name" name="Name" maxlength="10"><br>
+          <input type="text" name="job" maxlength="10"><br>
           <button type="submit">Submit</button>
         </form>
       </td>
       <td>
         <form method="post" class="button-container" action="{% url 'scheduleEdit' %}">
           {% csrf_token %}
+          <input type="hidden" name="dayval" value="5"/>
           Start time:
           <input type="time" name="start" /><br>
           End time:
           <input type="time" name="end" /><br>
           Job title:
-          <input type="text" id="Name" name="Name" maxlength="10"><br>
+          <input type="text" name="job" maxlength="10"><br>
           <button type="submit">Submit</button>
         </form>
       </td>
       <td>
         <form method="post" class="button-container" action="{% url 'scheduleEdit' %}">
           {% csrf_token %}
+          <input type="hidden" name="dayval" value="6"/>
           Start time:
           <input type="time" name="start" /><br>
           End time:
           <input type="time" name="end" /><br>
           Job title:
-          <input type="text" id="Name" name="Name" maxlength="10"><br>
+          <input type="text" name="job" maxlength="10"><br>
           <button type="submit">Submit</button>
         </form>
       </td>
