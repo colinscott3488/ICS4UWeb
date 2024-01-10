@@ -99,7 +99,6 @@ def userWeek(request):
     <tr><td class="mon">{weekView[0].strftime("%A %b %-d")}</td><td class="tue">{weekView[1].strftime("%A %b %-d")}</td><td class="wed">{weekView[2].strftime("%A %b %-d")}</td><td class="thu">{weekView[3].strftime("%A %b %-d")}</td><td class="fri">{weekView[4].strftime("%A %b %-d")}</td><td class="sat">{weekView[5].strftime("%A %b %-d")}</td><td class="sun">{weekView[6].strftime("%A %b %-d")}</td></tr>
     <tr><td class="mon">{dbEvent[0]}</td><td class="tue">{dbEvent[1]}</td><td class="wed">{dbEvent[2]}</td><td class="thu">{dbEvent[3]}</td><td class="fri">{dbEvent[4]}</td><td class="sat">{dbEvent[5]}</td><td class="sun">{dbEvent[6]}</td></tr>
     <tr><td class="mon">{jobCode[0]}</td><td class="tue">{jobCode[1]}</td><td class="wed">{jobCode[2]}</td><td class="thu">{jobCode[3]}</td><td class="fri">{jobCode[4]}</td><td class="sat">{jobCode[5]}</td><td class="sun">{jobCode[6]}</td></tr>
-    </table>
     '''
     repeated = True
     return render(request, 'scheduleuser.html', {'cal': week})
@@ -176,6 +175,8 @@ def scheduleEdit(request):
         selectedShift = Schedule.objects.filter(user=userList, dateStarting=weekDate + datetime.timedelta(days=int(daySelected)))
         if startShift == '' and endShift == '' and selectedJob == '':
             for x in selectedShift:
+                if x.jobCode == "called off":
+                    return HttpResponseRedirect("/design/userfound")
                 addMarketplace = ShiftMarketplace()
                 addMarketplace.jobCode = x.jobCode
                 addMarketplace.startTime = x.startTime

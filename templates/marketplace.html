@@ -11,7 +11,8 @@
 {% endif %}
 <body>
 
-    <table border="1">
+    <table cellpadding="0" cellspacing="10" class="month">
+        
       <tbody>
             Here is the list of available shifts:
       </tbody>
@@ -19,15 +20,14 @@
       <thead>
         {% for x in items %}
             <tr>
-                <th>{{ x.dateStarting }}: {{ x.startTime }} - {{ x.endTime }} ({{ x.jobCode }})</th>
-                <th>
-                    <form method="post" action="{% url 'claimshift' %}">
+                <th class="shiftinfo">{{ x.dateStarting }}: {{ x.startTime }} - {{ x.endTime }} ({{ x.jobCode }})</th>
+                <th class="claimshift">
+                    <form method="post" class="button-shifts" action="{% url 'claimshift' %}">
                         {% csrf_token %}
                         <input type="hidden" name="shift" value="{{ x.shiftID }}"/>
                         <button type="submit">Claim</button>
                     </form>
                 </th>
-                <!-- Add more column headers as needed -->
             </tr>
         {% endfor %}
       </thead>

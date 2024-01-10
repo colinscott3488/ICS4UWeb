@@ -73,6 +73,19 @@
             font-weight: bold;
         }
 
+        .shiftinfo {
+            text-align: left;
+            color: #333;
+            background-color: #ecf0f1;
+        }
+
+        .claimshift {
+            text-align: right;
+            padding-right: 20px;
+            color: #333;
+            background-color: #ecf0f1;
+        }
+
         .mon, .mon2 {
             text-align: center;
             color: #333;
@@ -113,48 +126,6 @@
             text-align: center;
             color: #333;
             background-color: #ecf0f1;
-        }
-
-        .monButton {
-            text-align: center;
-            color: #333;
-            background-color: #909090;
-        }
-
-        .tueButton {
-            text-align: center;
-            color: #333;
-            background-color: #909090;
-        }
-
-        .wedButton {
-            text-align: center;
-            color: #333;
-            background-color: #909090;
-        }
-
-        .thuButton {
-            text-align: center;
-            color: #333;
-            background-color: #909090;
-        }
-
-        .friButton {
-            text-align: center;
-            color: #333;
-            background-color: #909090;
-        }
-
-        .satButton {
-            text-align: center;
-            color: #333;
-            background-color: #909090;
-        }
-
-        .sunButton {
-            text-align: center;
-            color: #796d6d;
-            background-color: #909090;
         }
 
         .schedulebutton {
@@ -218,6 +189,26 @@
         }
 
         .button-container button:hover {
+            background-color: #1a242b;
+            color: #ffffff;
+        }
+
+        .button-shifts button {
+            display: inline-block;
+            padding: 5px 10px;
+            font-size: 14px;
+            text-align: center;
+            text-decoration: none;
+            background-color: #333;
+            color: #ffffff;
+            border: 2px solid #333;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            margin: 0px;
+        }
+
+        .button-shifts button:hover {
             background-color: #1a242b;
             color: #ffffff;
         }
