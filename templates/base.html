@@ -236,6 +236,7 @@
         <a href="{% url 'home' %}">Home</a>
         {% if user.is_authenticated %}
         <a href="/design">Schedule</a>
+        <a href="/design/marketplace">Shift Marketplace</a>
         <a class="right" href="{% url 'logout' %}">Log Out</a>
         {% else %}
         <a class="right" href="{% url 'login' %}">Log In</a>

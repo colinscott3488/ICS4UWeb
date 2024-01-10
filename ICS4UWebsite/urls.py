@@ -28,4 +28,6 @@ urlpatterns = [
     path("schedule/", TemplateView.as_view(template_name="schedule.html"), name="schedule"),
     path('design/', include("schedule.urls")),
     path("schedulecreation/", TemplateView.as_view(template_name="schedulecreation.html"), name="schedulecreation"),
+    path("shiftmarket/", TemplateView.as_view(template_name="marketplace.html"), name="shiftmarket"),
+    path("shiftclaimerror/", TemplateView.as_view(template_name="shiftclaimerror.html"), name="shiftclaimerror"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

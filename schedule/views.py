@@ -2,8 +2,9 @@ from django.shortcuts import render
 import datetime
 from .forms import NavigationForm, scheduleCreate
 from django.http import HttpResponseRedirect
-from .models import Schedule
+from .models import Schedule, ShiftMarketplace
 import time
+import random
 
 #global values for schedule creation
 delta = 0
@@ -103,15 +104,44 @@ def userWeek(request):
     repeated = True
     return render(request, 'scheduleuser.html', {'cal': week})
 
-    # <tr class="button-container">
-    #     <td class="monButton"><button type="button">Button 1</button></td>
-    #     <td class="tueButton"><button type="button">Button 2</button></td>
-    #     <td class="wedButton"><button type="button">Button 3</button></td>
-    #     <td class="thuButton"><button type="button">Button 4</button></td>
-    #     <td class="friButton"><button type="button">Button 5</button></td>
-    #     <td class="satButton"><button type="button">Button 6</button></td>
-    #     <td class="sunButton"><button type="button">Button 7</button></td>
-    # </tr>
+def shiftMarketList(request):
+    items = ShiftMarketplace.objects.all()
+    return render(request, 'marketplace.html', {'items': items})
+
+#this is a brute force original number finder, this is so that
+#claim shift can find the shift using just an int
+def jobGener():
+    while(True):
+        apple = True
+        num = random.randint(1, 99999999999)
+        foundNum = ShiftMarketplace.objects.filter(shiftID=num)
+        print(foundNum)
+        for x in foundNum:
+            apple = False
+        if apple:
+            print('-'*32)
+            return num
+
+
+def claimShift(request):
+    if request.method == 'POST':
+        shift = request.POST.get('shift')
+        dataShift = ShiftMarketplace.objects.filter(shiftID=shift) #there cannot be duplicates
+        for x in dataShift:
+            findScheduled = Schedule.objects.filter(dateStarting=x.dateStarting, user=request.user.username)
+            for x in findScheduled:
+                return HttpResponseRedirect("/shiftclaimerror")
+            addShift = Schedule()
+            addShift.user = request.user.username
+            addShift.dateStarting = x.dateStarting
+            addShift.startTime = x.startTime
+            addShift.endTime = x.endTime
+            addShift.jobCode = x.jobCode
+            addShift.save()
+            x.delete()
+            return HttpResponseRedirect("/design/marketplace")
+        print(shift)
+    return HttpResponseRedirect("/shiftclaimerror")
 
 def weekChange(request):
     global delta
@@ -143,19 +173,35 @@ def scheduleEdit(request):
         selectedJob = request.POST.get('job')
         daySelected = request.POST.get('dayval')
         # print("Start: ", startTime, "End: ", endTime, "Selected Job: ", selectedJob) debug line
+        selectedShift = Schedule.objects.filter(user=userList, dateStarting=weekDate + datetime.timedelta(days=int(daySelected)))
         if startShift == '' and endShift == '' and selectedJob == '':
-            selectedShift = Schedule.objects.filter(user=userList, dateStarting=weekDate + datetime.timedelta(days=int(daySelected)))
             for x in selectedShift:
+                addMarketplace = ShiftMarketplace()
+                addMarketplace.jobCode = x.jobCode
+                addMarketplace.startTime = x.startTime
+                addMarketplace.endTime = x.endTime
+                addMarketplace.dateStarting = x.dateStarting
+                addMarketplace.shiftID = jobGener() #randomly assigns number, so shift can be called later
+                addMarketplace.save()
+                print(x.jobCode)
                 x.jobCode = "called off" 
                 x.save()
         else:
-            newshift = Schedule()
-            newshift.user = userList
-            newshift.startTime = datetime.datetime.strptime(startShift, "%H:%M")
-            newshift.endTime = datetime.datetime.strptime(endShift, "%H:%M")
-            newshift.dateStarting = weekDate + datetime.timedelta(days=int(daySelected))
-            newshift.jobCode = selectedJob
-            newshift.save()
+            if selectedShift:
+                for x in selectedShift:
+                    x.startTime = datetime.datetime.strptime(startShift, "%H:%M")
+                    x.endTime = datetime.datetime.strptime(endShift, "%H:%M")
+                    x.dateStarting = weekDate + datetime.timedelta(days=int(daySelected))
+                    x.jobCode = selectedJob
+                    x.save()
+            else:
+                newshift = Schedule()
+                newshift.user = userList
+                newshift.startTime = datetime.datetime.strptime(startShift, "%H:%M")
+                newshift.endTime = datetime.datetime.strptime(endShift, "%H:%M")
+                newshift.dateStarting = weekDate + datetime.timedelta(days=int(daySelected))
+                newshift.jobCode = selectedJob
+                newshift.save()
         return HttpResponseRedirect("/design/userfound")
     
     

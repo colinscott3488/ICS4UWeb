@@ -16,6 +16,7 @@ class ShiftMarketplace(models.Model):
     startTime = models.TimeField(default=datetime.datetime.now())
     endTime = models.TimeField(default=datetime.datetime.now())
     jobCode = models.CharField(max_length=20)
+    shiftID = models.IntegerField(max_length=20)
     def __str__(self):
         return f"({(self.startTime).strftime("%-I:%M %p")} - {(self.endTime).strftime("%-I:%M %p")} / {self.dateStarting})"
     
