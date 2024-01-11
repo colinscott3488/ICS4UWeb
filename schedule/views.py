@@ -6,30 +6,19 @@ from .models import Schedule, ShiftMarketplace
 import time
 import random
 
-#global values for schedule creation
-delta = 0
-userList = ""
-weekDate = ""
-repeated = False
-
 #schedule creation find user
 def userFind(request):
-    #adding variables to function to be used later
-    global userList
-    global weekDate
-    global repeated
-
     #resetting values after click to schedule editor
-    userList = ""
-    weekDate = ""
-    repeated = False
+    request.session['userList'] = ""
+    request.session['weekDate'] = ""
+    request.session['repeated'] = False
 
     #form handiling
     if request.method == 'POST':
         form = scheduleCreate(request.POST)
         if form.is_valid():
-            userList = form.cleaned_data['users']
-            weekDate = form.cleaned_data['weekStart']
+            request.session['userList'] = form.cleaned_data['users'].username
+            request.session['weekDate'] = form.cleaned_data['weekStart'].isoformat()
 
             #redirects form to the actual schedule
             return HttpResponseRedirect("/design/userfound")
@@ -42,13 +31,8 @@ def userFind(request):
 
 #actual schedule creation part
 def userWeek(request):
-    #bringing date values into function
-    global userList
-    global weekDate
-    global repeated
-
     #preventing future errors for no data in userfound
-    if userList == "":
+    if request.session['userList'] == "":
         return HttpResponseRedirect("/design/userfind")
     
     #all the schedule data in dicts, will be used on website html
@@ -56,12 +40,14 @@ def userWeek(request):
     dbEvent = {0:'no event', 1:'no event', 2:'no event', 3:'no event', 4:'no event', 5:'no event', 6:'no event'}
     jobCode = {0:'', 1:'', 2:'', 3:'', 4:'', 5:'', 6:''}
 
+    sessionToDateTime = datetime.datetime.strptime(request.session['weekDate'], '%Y-%m-%d')
+
     # 3 nested for loop time :)
     #iterating on database and all that
     for x in dbEvent:
         #database objects made complicated on purpose 
-        findTime = Schedule.objects.filter(user=userList, dateStarting=weekDate + datetime.timedelta(days=x)).values_list('startTime', "endTime")
-        findJobCode = Schedule.objects.filter(user=userList, dateStarting=weekDate + datetime.timedelta(days=x)).values_list('jobCode')
+        findTime = Schedule.objects.filter(user=request.session['userList'], dateStarting=sessionToDateTime + datetime.timedelta(days=x)).values_list('startTime', "endTime")
+        findJobCode = Schedule.objects.filter(user=request.session['userList'], dateStarting=sessionToDateTime + datetime.timedelta(days=x)).values_list('jobCode')
 
         #place to dump cleaned up database when finished
         foundTime = []
@@ -84,23 +70,23 @@ def userWeek(request):
             dbEvent[x] = "no event"
 
     #redirect to find page if no data
-    if weekDate == "":
+    if request.session['weekDate'] == "":
         return HttpResponseRedirect("/design/userfind")
     else:
-        if repeated == False: # crashed page on reload without, needed for schedule editing :)
-            weekDate = datetime.datetime.strptime(str(weekDate), "%Y-%m-%d")
+        if request.session['repeated'] == False: # crashed page on reload without, needed for schedule editing :)
+            sessionToDateTime = datetime.datetime.strptime(request.session['weekDate'], "%Y-%m-%d")
     for x in range(0,7): #making individual dates
-        weekView[x] = weekDate + datetime.timedelta(days=x)
+        weekView[x] = sessionToDateTime + datetime.timedelta(days=x)
     #html table to be displayed (fstring to put data)
     # strftime used to keep datetime object in place :)
     week = f'''
     <table border="0" cellpadding="0" cellspacing="10" class="month">
-    <tr><th colspan="7" class="month">Week Starting {weekDate.strftime("%B %-d, %Y")} for {userList}</th></tr>
+    <tr><th colspan="7" class="month">Week Starting {sessionToDateTime.strftime("%B %-d, %Y")} for {request.session['userList']}</th></tr>
     <tr><td class="mon">{weekView[0].strftime("%A %b %-d")}</td><td class="tue">{weekView[1].strftime("%A %b %-d")}</td><td class="wed">{weekView[2].strftime("%A %b %-d")}</td><td class="thu">{weekView[3].strftime("%A %b %-d")}</td><td class="fri">{weekView[4].strftime("%A %b %-d")}</td><td class="sat">{weekView[5].strftime("%A %b %-d")}</td><td class="sun">{weekView[6].strftime("%A %b %-d")}</td></tr>
     <tr><td class="mon">{dbEvent[0]}</td><td class="tue">{dbEvent[1]}</td><td class="wed">{dbEvent[2]}</td><td class="thu">{dbEvent[3]}</td><td class="fri">{dbEvent[4]}</td><td class="sat">{dbEvent[5]}</td><td class="sun">{dbEvent[6]}</td></tr>
     <tr><td class="mon">{jobCode[0]}</td><td class="tue">{jobCode[1]}</td><td class="wed">{jobCode[2]}</td><td class="thu">{jobCode[3]}</td><td class="fri">{jobCode[4]}</td><td class="sat">{jobCode[5]}</td><td class="sun">{jobCode[6]}</td></tr>
     '''
-    repeated = True
+    request.session['repeated'] = True
     return render(request, 'scheduleuser.html', {'cal': week})
 
 def shiftMarketList(request):
@@ -114,11 +100,9 @@ def jobGener():
         apple = True
         num = random.randint(1, 99999999999)
         foundNum = ShiftMarketplace.objects.filter(shiftID=num)
-        print(foundNum)
         for x in foundNum:
             apple = False
         if apple:
-            print('-'*32)
             return num
 
 
@@ -143,23 +127,23 @@ def claimShift(request):
     return HttpResponseRedirect("/shiftclaimerror")
 
 def weekChange(request):
-    global delta
+    # delta = request.session['delta']
 
     if request.method == 'POST':
         form = NavigationForm(request.POST)
         if form.is_valid():
             direction = form.cleaned_data['direction']
-
+            request.session['repeatedSched'] = True
             if direction == 'back':
-                delta -= 14
+                request.session['delta'] -= 14
                 print("back")
 
             elif direction == 'forward':
-                delta += 14
+                request.session['delta'] += 14
                 print("forward")
             
             elif direction == 'current':
-                delta = 0
+                request.session['delta'] = 0
                 print("today")
 
             return HttpResponseRedirect("/design")
@@ -171,8 +155,9 @@ def scheduleEdit(request):
         endShift = request.POST.get('end')
         selectedJob = request.POST.get('job')
         daySelected = request.POST.get('dayval')
+        sessionToDateTime = datetime.datetime.strptime(request.session['weekDate'], '%Y-%m-%d')
         # print("Start: ", startTime, "End: ", endTime, "Selected Job: ", selectedJob) debug line
-        selectedShift = Schedule.objects.filter(user=userList, dateStarting=weekDate + datetime.timedelta(days=int(daySelected)))
+        selectedShift = Schedule.objects.filter(user=request.session['userList'], dateStarting=sessionToDateTime + datetime.timedelta(days=int(daySelected)))
         if startShift == '' and endShift == '' and selectedJob == '':
             for x in selectedShift:
                 if x.jobCode == "called off":
@@ -192,15 +177,15 @@ def scheduleEdit(request):
                 for x in selectedShift:
                     x.startTime = datetime.datetime.strptime(startShift, "%H:%M")
                     x.endTime = datetime.datetime.strptime(endShift, "%H:%M")
-                    x.dateStarting = weekDate + datetime.timedelta(days=int(daySelected))
+                    x.dateStarting = sessionToDateTime + datetime.timedelta(days=int(daySelected))
                     x.jobCode = selectedJob
                     x.save()
             else:
                 newshift = Schedule()
-                newshift.user = userList
+                newshift.user = request.session['userList']
                 newshift.startTime = datetime.datetime.strptime(startShift, "%H:%M")
                 newshift.endTime = datetime.datetime.strptime(endShift, "%H:%M")
-                newshift.dateStarting = weekDate + datetime.timedelta(days=int(daySelected))
+                newshift.dateStarting = sessionToDateTime + datetime.timedelta(days=int(daySelected))
                 newshift.jobCode = selectedJob
                 newshift.save()
         return HttpResponseRedirect("/design/userfound")
@@ -208,8 +193,9 @@ def scheduleEdit(request):
     
 
 def tableRequest(request):
-    global delta
-    currentDate = datetime.datetime.now() + datetime.timedelta(days=delta)
+    if "delta" not in request.session:
+        request.session['delta'] = 0
+    currentDate = datetime.datetime.now() + datetime.timedelta(days=request.session['delta'])
     daysOf = {1 : "", 2 : "", 3 : "", 4 : "", 5 : "", 6 : "", 7 : "", 8 : "", 9 : "", 10 : "", 11 : "", 12 : "", 13 : "", 14 : "",}
     eventList = {1 : "no event", 2 : "no event", 3 : "no event", 4 : "no event", 5 : "no event", 6 : "no event", 7 : "no event", 8 : "no event", 9 : "no event", 10 : "no event", 11 : "no event", 12 : "no event", 13 : "no event", 14 : "no event"}
     weekdayDay = currentDate.weekday() + 1
@@ -224,7 +210,7 @@ def tableRequest(request):
         daysOf[x] = (currentDate + datetime.timedelta(days=count)).strftime("%d")
         count += 1
     daysOf[weekdayDay] = currentDate.strftime("%d")
-    if delta == 0:
+    if request.session['delta'] == 0:
         orange = '''{
         color: #0f1d9d;
         }
