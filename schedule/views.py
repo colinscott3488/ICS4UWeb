@@ -5,6 +5,17 @@ from django.http import HttpResponseRedirect
 from .models import Schedule, ShiftMarketplace
 import time
 import random
+import pyowm
+
+# owm = pyowm.OWM('bab2e151773e426c2c44c37b35bc2b01')
+# weather_mgr = owm.weather_manager()
+# place = 'Kolkata, IN'
+# observation = weather_mgr.weather_at_place(place)
+# print(observation)
+
+def homePage(request):
+    form = "form"
+    return render(request, 'home.html', {'form': form})
 
 #schedule creation find user
 def userFind(request):
@@ -172,7 +183,7 @@ def scheduleEdit(request):
                 print(x.jobCode)
                 x.jobCode = "called off" 
                 x.save()
-        else:
+        elif startShift != '' and endShift != '' and selectedJob != '':
             if selectedShift:
                 for x in selectedShift:
                     x.startTime = datetime.datetime.strptime(startShift, "%H:%M")
@@ -188,6 +199,9 @@ def scheduleEdit(request):
                 newshift.dateStarting = sessionToDateTime + datetime.timedelta(days=int(daySelected))
                 newshift.jobCode = selectedJob
                 newshift.save()
+        else:
+            HttpResponseRedirect("/design/userfound")
+
         return HttpResponseRedirect("/design/userfound")
     
     
