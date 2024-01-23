@@ -12,4 +12,4 @@ Simple scheduling, on a budget!
 - Django
 - CSS/HTML knowledge
 - ChatGPT
-- Will to live
+- Will to live (will be used up)
