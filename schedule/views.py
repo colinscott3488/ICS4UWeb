@@ -7,11 +7,10 @@ import time
 import random
 import pyowm
 
-# owm = pyowm.OWM('bab2e151773e426c2c44c37b35bc2b01')
-# weather_mgr = owm.weather_manager()
-# place = 'Kolkata, IN'
-# observation = weather_mgr.weather_at_place(place)
-# print(observation)
+owm = pyowm.OWM('bab2e151773e426c2c44c37b35bc2b01')
+weather_mgr = owm.weather_manager()
+place = 'Kolkata, IN'
+observation = weather_mgr.weather_at_place(place)
 
 def homePage(request):
     form = "form"
