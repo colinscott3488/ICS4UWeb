@@ -5,18 +5,7 @@ from django.http import HttpResponseRedirect
 from .models import Schedule, ShiftMarketplace
 import time
 import random
-# import pyowm
 
-# owm = pyowm.OWM('bab2e151773e426c2c44c37b35bc2b01')
-# weather_mgr = owm.weather_manager()
-# place = 'Kolkata, IN'
-# observation = weather_mgr.weather_at_place(place)
-
-# not doing this (dogs instead)
-
-# def homePage(request):
-#     form = "form"
-#     return render(request, 'home.html', {'form': form})
 
 #schedule creation find user
 def userFind(request):
